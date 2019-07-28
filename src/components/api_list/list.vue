@@ -34,43 +34,92 @@
 
             <el-main>
                 <el-table :data="tableData">
-                    <el-table-column prop="date" label="日期" width="140">
-                    </el-table-column>
-                    <el-table-column prop="name" label="姓名" width="120">
-                    </el-table-column>
-                    <el-table-column prop="address" label="地址">
+                    <el-table-column prop="id" label="id" width="140"></el-table-column>
+                    <el-table-column prop="created" label="created" width="120"></el-table-column>
+                    <el-table-column prop="title" label="title"></el-table-column>
+                    <el-table-column prop="code" label="code"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                            <el-button @click="handleDelete(scope.$index,scope.row)"  type="text" size="small">删除</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-main>
         </el-container>
+
+        <!--查看内容-->
+        <el-dialog title="详细信息" :visible.sync="dialogFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="id" :label-width="formLabelWidth">
+                        <el-input v-model="form.id" :disabled="true" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="created" :label-width="formLabelWidth">
+                        <el-input v-model="form.created" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="title" :label-width="formLabelWidth">
+                        <el-input v-model="form.title" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="code" :label-width="formLabelWidth">
+                        <el-input v-model="form.code" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleEdit(form)">确 定</el-button>
+                </div>
+            </el-dialog>
     </el-container>
 </template>
 
 <script>
     export default {
-        el:'tableData',
-        data:{
-            tableData:[],
-            apiList:'/api/list'
+        data: function () {
+            return {
+                tableData: [{date: '123123', name: '1223', address: 'asdfas'}],
+                form: {
+                    date: '',
+                    name: '',
+                    address: '',
+                },
+                formLabelWidth: '120px',
+                dialogFormVisible: false,
+            }
         },
-        created:function () {
-            this.getApiList()
+        created() {
+            this.queryapiList()
         },
-        methods:{
-            getApiList:function () {
-               var that = this
-                that.$http({
-                    method:'GET',
-                    url:this.apiList
-                }).then(function (response) {
+        methods: {
+            queryapiList: function () {
+                this.$http.get('http://192.168.1.20:8000/api/name/?format=json').then((response) => {
                     this.tableData = response.data
-                }),function (error) {
-                    alert(error)
-                }
+                })
+            },
+            handleClick:function(row) {
+                this.form=row;
+                this.dialogFormVisible=true
+            },
+            handleDelete:function (index,row) {
+                var id = row.id;
+                var url = "http://192.168.1.20:8000/api/name/"+id+"/";
+                this.$http.delete(url).then((response)=>{
+                    this.$message('删除成功'+response.data);
+                    this.tableData.splice(index, 1);
+                })
+            },
+            handleEdit:function (form) {
+                var url = "http://192.168.1.20:8000/api/name/"+form.id+"/?format=json";
+                this.$http.put(url,{title:form.title,code:form.code}).then((response)=>{
+                    this.$message('修改成功'+response.data);
+                    this.queryapiList();
+                    this.dialogFormVisible = false;
+
+                })
+
             }
 
-        }
 
+        }
 
     };
 </script>
