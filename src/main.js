@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import App from './App.vue'
 import VueResource from 'vue-resource';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -23,7 +24,7 @@ router.beforeEach((to, from, next) => {
     let name = "validationId";
     var par = getUrlStr(name);
     if (par != null) {
-        let params = {validationId: par};
+        //let params = {validationId: par};
         $.ajax({
             url: global.baseUrl + '/api/userinfo/getUser',//url路径
             type: 'POST', //GET
@@ -45,8 +46,10 @@ router.beforeEach((to, from, next) => {
     if (!role && to.path !== '/login') {
         //next('/login');
         let baseUrl = global.baseUrl;//后端服务地址8000
-        let casUrl = "http://login.taoche.com/casserver";//单点登录服务地址
+        //let casUrl = "http://login.taoche.com/casserver";//单点登录服务地址
+        let casUrl = "http://uat.crm.yxqiche.com/casserver";//单点登录服务地址
         window.location.href = casUrl + '/login?service=' + baseUrl + '/login/?'
+        //window.location.href = casUrl + '/?service=' + baseUrl
 
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
@@ -66,5 +69,5 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
-  // render: h => h(api_list),
+    render: h => h(App),
 }).$mount('#app');

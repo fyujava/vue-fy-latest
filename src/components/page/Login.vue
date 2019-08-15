@@ -48,6 +48,7 @@
             localStorage.setItem('ms_username', this.ruleForm.username);
             this.$router.push('/');
           } else {
+          // eslint-disable-next-line
             console.log('error submit!!');
             return false;
           }
