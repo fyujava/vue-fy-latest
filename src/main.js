@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
         let baseUrl = global.baseUrl;//后端服务地址8000
         //let casUrl = "http://login.taoche.com/casserver";//单点登录服务地址
         let casUrl = "http://uat.crm.yxqiche.com/casserver";//单点登录服务地址
-        window.location.href = casUrl + '/login?service=' + baseUrl + '/login/?'
+        window.location.href = casUrl + '/login?service=' + baseUrl + '/login/'
         //window.location.href = casUrl + '/?service=' + baseUrl
 
     } else if (to.meta.permission) {
