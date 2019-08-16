@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import App from './App.vue'
+//import App from './App.vue'
+import list from './components/api_list/list.vue'
 import VueResource from 'vue-resource';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -23,6 +24,7 @@ router.beforeEach((to, from, next) => {
 
     let name = "validationId";
     var par = getUrlStr(name);
+    alert(par)
     if (par != null) {
         //let params = {validationId: par};
         $.ajax({
@@ -69,5 +71,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
-    render: h => h(App),
+    //render: h => h(App),
+    render: h => h(list)
 }).$mount('#app');

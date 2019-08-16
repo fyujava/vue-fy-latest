@@ -29,7 +29,7 @@
                         <el-dropdown-item>del user</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
-                <span>方玉</span>
+                <span>{{username}}</span>
             </el-header>
 
             <el-main>
@@ -86,12 +86,18 @@
                 dialogFormVisible: false,
             }
         },
+        computed: {
+      username(){
+        let username = localStorage.getItem('ms_username');
+        return username ? username : this.name;
+      }
+    },
         created() {
             this.queryapiList()
         },
         methods: {
             queryapiList: function () {
-                this.$http.get('http://192.168.1.20:8000/api/name/?format=json').then((response) => {
+                this.$http.get('http://192.168.180.29:8000/api/name/?format=json').then((response) => {
                     this.tableData = response.data
                 })
             },
@@ -101,14 +107,14 @@
             },
             handleDelete:function (index,row) {
                 var id = row.id;
-                var url = "http://192.168.1.20:8000/api/name/"+id+"/";
+                var url = "http://192.168.180.29:8000/api/name/"+id+"/";
                 this.$http.delete(url).then((response)=>{
                     this.$message('删除成功'+response.data);
                     this.tableData.splice(index, 1);
                 })
             },
             handleEdit:function (form) {
-                var url = "http://192.168.1.20:8000/api/name/"+form.id+"/?format=json";
+                var url = "http://192.168.180.29:8000/api/name/"+form.id+"/?format=json";
                 this.$http.put(url,{title:form.title,code:form.code}).then((response)=>{
                     this.$message('修改成功'+response.data);
                     this.queryapiList();
